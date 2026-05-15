@@ -14,7 +14,213 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chatbot_history: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      flashcards: {
+        Row: {
+          back: string
+          created_at: string
+          deck_name: string
+          front: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          back: string
+          created_at?: string
+          deck_name?: string
+          front: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          back?: string
+          created_at?: string
+          deck_name?: string
+          front?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      productivity_stats: {
+        Row: {
+          day: string
+          id: string
+          minutes_studied: number
+          quizzes_completed: number
+          streak: number
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          day?: string
+          id?: string
+          minutes_studied?: number
+          quizzes_completed?: number
+          streak?: number
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          day?: string
+          id?: string
+          minutes_studied?: number
+          quizzes_completed?: number
+          streak?: number
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      quizzes: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          questions: Json
+          score: number | null
+          title: string
+          topic: string | null
+          user_id: string
+          xp_earned: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          questions?: Json
+          score?: number | null
+          title: string
+          topic?: string | null
+          user_id: string
+          xp_earned?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          questions?: Json
+          score?: number | null
+          title?: string
+          topic?: string | null
+          user_id?: string
+          xp_earned?: number | null
+        }
+        Relationships: []
+      }
+      study_roadmaps: {
+        Row: {
+          created_at: string
+          daily_hours: number | null
+          exam_name: string
+          id: string
+          plan: Json
+          target_date: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          daily_hours?: number | null
+          exam_name: string
+          id?: string
+          plan?: Json
+          target_date?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          daily_hours?: number | null
+          exam_name?: string
+          id?: string
+          plan?: Json
+          target_date?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      study_sessions: {
+        Row: {
+          created_at: string
+          duration_minutes: number
+          id: string
+          notes: string | null
+          started_at: string
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          started_at?: string
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          started_at?: string
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
