@@ -75,11 +75,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "AI Teaching Studio — Learn. Evolve. Excel." },
       { name: "description", content: "A futuristic AI-powered learning platform: roadmaps, quizzes, flashcards, and a smart tutor — all in one glass-morphic studio." },
       { name: "author", content: "AI Teaching Studio" },
-      { property: "og:title", content: "AI Teaching Studio" },
-      { property: "og:description", content: "Futuristic AI-powered learning platform with roadmaps, quizzes, and a smart tutor." },
+      { property: "og:title", content: "AI Teaching Studio — Learn. Evolve. Excel." },
+      { property: "og:description", content: "A futuristic AI-powered learning platform: roadmaps, quizzes, flashcards, and a smart tutor — all in one glass-morphic studio." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "AI Teaching Studio — Learn. Evolve. Excel." },
+      { name: "twitter:description", content: "A futuristic AI-powered learning platform: roadmaps, quizzes, flashcards, and a smart tutor — all in one glass-morphic studio." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bea7796c-62ac-4911-bec6-ce2075eaec53/id-preview-28243ddd--cde46826-5550-424e-a8aa-098d80996a82.lovable.app-1778861176971.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bea7796c-62ac-4911-bec6-ce2075eaec53/id-preview-28243ddd--cde46826-5550-424e-a8aa-098d80996a82.lovable.app-1778861176971.png" },
     ],
     links: [
       {
