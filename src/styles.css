@@ -119,15 +119,16 @@
 @layer utilities {
   .glass {
     background: var(--glass);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-glass);
+    will-change: transform;
   }
   .glass-strong {
-    background: oklch(0.2 0.04 270 / 0.55);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    background: oklch(0.2 0.04 270 / 0.6);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-glass);
   }
@@ -152,16 +153,12 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0) }
-  50% { transform: translateY(-12px) }
+  0%, 100% { transform: translate3d(0,0,0) }
+  50% { transform: translate3d(0,-10px,0) }
 }
 @keyframes orb-pulse {
   0%, 100% { transform: scale(1); opacity: 0.95 }
-  50% { transform: scale(1.08); opacity: 1 }
+  50% { transform: scale(1.06); opacity: 1 }
 }
-@keyframes drift {
-  from { transform: translate(0,0) }
-  to { transform: translate(40px, -60px) }
-}
-.animate-float { animation: float 6s ease-in-out infinite; }
-.animate-orb { animation: orb-pulse 4s ease-in-out infinite; }
+.animate-float { animation: float 6s ease-in-out infinite; will-change: transform; }
+.animate-orb { animation: orb-pulse 4s ease-in-out infinite; will-change: transform; }
