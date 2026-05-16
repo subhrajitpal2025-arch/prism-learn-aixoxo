@@ -24,6 +24,7 @@ function Chat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const callTutor = useServerFn(askTutor);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
