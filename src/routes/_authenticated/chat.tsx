@@ -5,6 +5,9 @@ import { Send, Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
+import { useServerFn } from "@tanstack/react-start";
+import { askTutor } from "@/lib/tutor.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/chat")({
   component: Chat,
