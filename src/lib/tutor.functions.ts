@@ -43,6 +43,9 @@ export const askTutor = createServerFn({ method: "POST" })
       if (!res.ok) {
         const text = await res.text();
         console.error("Gemini error:", res.status, text);
+        if (res.status === 429) {
+          return { reply: "", error: "Rate limit reached on your Gemini API key. Wait a minute and retry, or upgrade your Google AI plan." };
+        }
         return { reply: "", error: `AI service error (${res.status}).` };
       }
 
