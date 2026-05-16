@@ -1,18 +1,20 @@
 import { useMemo } from "react";
 
-export function Particles({ count = 40 }: { count?: number }) {
+export function Particles({ count = 18 }: { count?: number }) {
+  // Cap count aggressively — particles are decorative and expensive at scale.
+  const safeCount = Math.min(count, 24);
   const particles = useMemo(
     () =>
-      Array.from({ length: count }).map((_, i) => ({
+      Array.from({ length: safeCount }).map((_, i) => ({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 3 + 1,
+        size: Math.random() * 2 + 1,
         delay: Math.random() * 8,
-        duration: Math.random() * 10 + 8,
-        opacity: Math.random() * 0.5 + 0.2,
+        duration: Math.random() * 10 + 10,
+        opacity: Math.random() * 0.4 + 0.2,
       })),
-    [count],
+    [safeCount],
   );
 
   return (
@@ -27,9 +29,8 @@ export function Particles({ count = 40 }: { count?: number }) {
             width: p.size,
             height: p.size,
             opacity: p.opacity,
-            filter: "blur(0.5px)",
-            boxShadow: "0 0 8px rgba(255,255,255,0.6)",
             animation: `float ${p.duration}s ease-in-out ${p.delay}s infinite`,
+            willChange: "transform",
           }}
         />
       ))}
