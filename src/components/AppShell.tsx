@@ -33,7 +33,7 @@ export function AppShell() {
 
   return (
     <div className="relative min-h-screen w-full">
-      <Particles count={28} />
+      <Particles count={14} />
       <div className="relative flex min-h-screen">
         {/* Sidebar */}
         <aside className="sticky top-0 hidden h-screen w-64 shrink-0 p-4 md:block">
