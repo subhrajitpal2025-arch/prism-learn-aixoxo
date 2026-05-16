@@ -8,8 +8,8 @@ interface Props {
 }
 
 const v: Variants = {
-  hidden: { opacity: 0, y: 24, filter: "blur(12px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)" },
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0 },
 };
 
 export function GlassCard({ children, className = "", delay = 0 }: Props) {
@@ -18,8 +18,8 @@ export function GlassCard({ children, className = "", delay = 0 }: Props) {
       variants={v}
       initial="hidden"
       animate="show"
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
-      className={`glass rounded-3xl p-6 transition-all hover:bg-white/[0.08] ${className}`}
+      transition={{ duration: 0.45, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={`glass rounded-3xl p-6 transition-colors hover:bg-white/[0.08] ${className}`}
     >
       {children}
     </motion.div>

@@ -28,15 +28,15 @@ export function CinematicIntro({ onDone }: { onDone: () => void }) {
         <motion.div
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, filter: "blur(20px)" }}
-          transition={{ duration: 0.9, ease: "easeInOut" }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <Particles count={60} />
+          <Particles count={24} />
           <AIOrb size={140} />
           <motion.h1
             className="mt-12 text-4xl md:text-6xl font-semibold text-gradient tracking-tight"
-            initial={{ opacity: 0, y: 20, letterSpacing: "0.4em" }}
-            animate={{ opacity: 1, y: 0, letterSpacing: "-0.02em" }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             AI Teaching Studio
