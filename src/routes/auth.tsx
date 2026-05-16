@@ -73,7 +73,7 @@ function AuthPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
-      <Particles count={50} />
+      <Particles count={20} />
       {/* Floating orbs */}
       <div className="pointer-events-none absolute -top-32 -left-32 size-[28rem] rounded-full opacity-50 blur-3xl"
         style={{ background: "radial-gradient(circle, oklch(0.6 0.28 290 / 0.6), transparent 70%)" }} />
@@ -81,9 +81,9 @@ function AuthPage() {
         style={{ background: "radial-gradient(circle, oklch(0.7 0.24 200 / 0.5), transparent 70%)" }} />
 
       <motion.div
-        initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="glass-strong relative z-10 w-full max-w-md rounded-3xl p-8"
       >
         <div className="flex flex-col items-center">
