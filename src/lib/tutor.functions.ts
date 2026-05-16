@@ -29,7 +29,7 @@ export const askTutor = createServerFn({ method: "POST" })
 
     try {
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -43,6 +43,9 @@ export const askTutor = createServerFn({ method: "POST" })
       if (!res.ok) {
         const text = await res.text();
         console.error("Gemini error:", res.status, text);
+        if (res.status === 429) {
+          return { reply: "", error: "Rate limit reached on your Gemini API key. Wait a minute and retry, or upgrade your Google AI plan." };
+        }
         return { reply: "", error: `AI service error (${res.status}).` };
       }
 
