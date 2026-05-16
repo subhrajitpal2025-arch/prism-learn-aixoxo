@@ -5,6 +5,9 @@ import { Send, Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
+import { useServerFn } from "@tanstack/react-start";
+import { askTutor } from "@/lib/tutor.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/chat")({
   component: Chat,
@@ -21,6 +24,7 @@ function Chat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const callTutor = useServerFn(askTutor);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,16 +46,26 @@ function Chat() {
       });
     }
 
-    // Local placeholder response (Lovable AI Gateway can be wired in next iteration)
-    await new Promise((r) => setTimeout(r, 900));
-    const reply = `Great question! Here's a quick take on **"${content}"**:\n\n- Break it down into smaller parts\n- Identify the core concept\n- Apply it with a worked example\n\nWant me to go deeper?`;
-    setMessages((m) => [...m, { role: "assistant", content: reply }]);
-    if (u.user) {
-      await supabase.from("chatbot_history").insert({
-        user_id: u.user.id, role: "assistant", content: reply,
-      });
+    try {
+      const res = await callTutor({ data: { messages: next } });
+      if (res.error) {
+        toast.error(res.error);
+        setMessages((m) => [...m, { role: "assistant", content: `⚠️ ${res.error}` }]);
+      } else {
+        const reply = res.reply;
+        setMessages((m) => [...m, { role: "assistant", content: reply }]);
+        if (u.user) {
+          await supabase.from("chatbot_history").insert({
+            user_id: u.user.id, role: "assistant", content: reply,
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
