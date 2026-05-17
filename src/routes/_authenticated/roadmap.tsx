@@ -365,6 +365,8 @@ function LessonPlanSection() {
   const [generating, setGenerating] = useState(false);
   const [sending, setSending] = useState(false);
 
+  const ask = useServerFn(askTutor);
+
   const generatePlan = async () => {
     if (!subject || !topic) return toast.error("Add subject and topic");
     setGenerating(true);
@@ -372,27 +374,8 @@ function LessonPlanSection() {
     try {
       const prompt = `Create a detailed ${duration}-minute lesson plan for ${role === "educator" ? "an educator teaching" : "a student learning"} ${subject} — topic: "${topic}". Level: ${level}. ${objectives ? `Learning objectives: ${objectives}.` : ""}
 Structure with: Overview, Objectives, Materials, Step-by-step Activities (with timing), Assessment, and Homework. Use clear markdown headings.`;
-      const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-      // Fallback: call our server function if direct gateway fails
-      let text = "";
-      if (res.ok) {
-        const j = await res.json();
-        text = j.choices?.[0]?.message?.content ?? "";
-      }
-      if (!text) {
-        // simple local skeleton fallback
-        text = `# ${topic} — ${duration} min lesson\n\n**Level:** ${level}\n\n## Objectives\n${objectives || "- Understand core concepts of " + topic}\n\n## Activities\n1. Warm-up (5 min)\n2. Direct instruction (15 min)\n3. Guided practice (15 min)\n4. Assessment (10 min)\n\n## Homework\nPractice problems on ${topic}.`;
-      }
+      const r = await ask({ data: { messages: [{ role: "user", content: prompt }] } });
+      const text = r?.reply || `# ${topic} — ${duration} min lesson\n\n**Level:** ${level}\n\n## Objectives\n${objectives || "- Understand core concepts of " + topic}\n\n## Activities\n1. Warm-up (5 min)\n2. Direct instruction (15 min)\n3. Guided practice (15 min)\n4. Assessment (10 min)\n\n## Homework\nPractice problems on ${topic}.`;
       setPlan(text);
       toast.success("Lesson plan ready");
     } catch (e) {
