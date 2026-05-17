@@ -14,8 +14,6 @@ export const Route = createFileRoute("/_authenticated/quiz")({
 });
 
 const SUBJECTS = ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science", "History", "Geography", "English"];
-
-const SUBJECTS = ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science", "History", "Geography", "English"];
 const EXAMS = ["None", "JEE", "NEET", "SAT", "GRE", "GATE", "UPSC", "GCSE", "A-Levels"];
 const DIFFICULTIES = ["easy", "medium", "hard", "mixed"] as const;
 type Difficulty = (typeof DIFFICULTIES)[number];
