@@ -13,10 +13,7 @@ export const Route = createFileRoute("/_authenticated/quiz")({
   component: QuizArena,
 });
 
-const LEADERBOARD = [
-  { name: "NovaAI", xp: 12480 }, { name: "QuasarQ", xp: 11200 }, { name: "OrbitX", xp: 9320 },
-  { name: "You", xp: 8870 }, { name: "Pixel", xp: 7700 },
-];
+const SUBJECTS = ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science", "History", "Geography", "English"];
 
 const SUBJECTS = ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science", "History", "Geography", "English"];
 const EXAMS = ["None", "JEE", "NEET", "SAT", "GRE", "GATE", "UPSC", "GCSE", "A-Levels"];
