@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GlassCard, PageHeader } from "@/components/GlassCard";
+import { askTutor } from "@/lib/tutor.functions";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import {
   Calendar,
@@ -12,6 +14,10 @@ import {
   TrendingUp,
   BookOpen,
   Flame,
+  GraduationCap,
+  Mail,
+  Send,
+  User,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -338,6 +344,226 @@ function Roadmap() {
           </div>
         </>
       )}
+
+      <LessonPlanSection />
+    </div>
+  );
+}
+
+const WEBHOOK_URL = "https://hook.eu1.make.com/416hfbekgf4o97ksq3ivnehl70e3vxdc";
+
+function LessonPlanSection() {
+  const [role, setRole] = useState<"educator" | "student">("educator");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [topic, setTopic] = useState("");
+  const [level, setLevel] = useState("Beginner");
+  const [duration, setDuration] = useState(45);
+  const [objectives, setObjectives] = useState("");
+  const [plan, setPlan] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const ask = useServerFn(askTutor);
+
+  const generatePlan = async () => {
+    if (!subject || !topic) return toast.error("Add subject and topic");
+    setGenerating(true);
+    setPlan("");
+    try {
+      const prompt = `Create a detailed ${duration}-minute lesson plan for ${role === "educator" ? "an educator teaching" : "a student learning"} ${subject} — topic: "${topic}". Level: ${level}. ${objectives ? `Learning objectives: ${objectives}.` : ""}
+Structure with: Overview, Objectives, Materials, Step-by-step Activities (with timing), Assessment, and Homework. Use clear markdown headings.`;
+      const r = await ask({ data: { messages: [{ role: "user", content: prompt }] } });
+      const text = r?.reply || `# ${topic} — ${duration} min lesson\n\n**Level:** ${level}\n\n## Objectives\n${objectives || "- Understand core concepts of " + topic}\n\n## Activities\n1. Warm-up (5 min)\n2. Direct instruction (15 min)\n3. Guided practice (15 min)\n4. Assessment (10 min)\n\n## Homework\nPractice problems on ${topic}.`;
+      setPlan(text);
+      toast.success("Lesson plan ready");
+    } catch (e) {
+      toast.error("Failed to generate plan");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const sendOutreach = async () => {
+    if (!email || !plan) return toast.error("Generate plan and add email");
+    setSending(true);
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        mode: "no-cors",
+        body: JSON.stringify({
+          role,
+          name,
+          email,
+          subject,
+          topic,
+          level,
+          duration_minutes: duration,
+          objectives,
+          lesson_plan: plan,
+          sent_at: new Date().toISOString(),
+        }),
+      });
+      toast.success("Outreach email sent");
+    } catch {
+      toast.error("Failed to send");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div className="mt-10">
+      <GlassCard>
+        <div className="mb-4 flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
+          <GraduationCap className="size-3.5" /> Lesson plan & outreach
+        </div>
+
+        {/* Role toggle */}
+        <div className="mb-5 inline-flex glass rounded-full p-1">
+          {(["educator", "student"] as const).map((r) => (
+            <button
+              key={r}
+              onClick={() => setRole(r)}
+              className={`relative rounded-full px-4 py-1.5 text-xs font-medium capitalize transition ${
+                role === r ? "text-foreground" : "text-muted-foreground"
+              }`}
+            >
+              {role === r && (
+                <motion.span
+                  layoutId="role-pill"
+                  className="absolute inset-0 -z-10 rounded-full bg-gradient-primary opacity-25"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              {r}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <Field label="Recipient name" icon={<User className="size-3.5" />}>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Jane Doe"
+              className="glass w-full rounded-2xl px-4 py-3 text-sm outline-none focus:bg-white/[0.08]"
+            />
+          </Field>
+          <Field label="Recipient email" icon={<Mail className="size-3.5" />}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="jane@school.edu"
+              className="glass w-full rounded-2xl px-4 py-3 text-sm outline-none focus:bg-white/[0.08]"
+            />
+          </Field>
+          <Field label="Subject">
+            <input
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              placeholder="Mathematics"
+              className="glass w-full rounded-2xl px-4 py-3 text-sm outline-none focus:bg-white/[0.08]"
+            />
+          </Field>
+          <Field label="Topic">
+            <input
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="Linear equations"
+              className="glass w-full rounded-2xl px-4 py-3 text-sm outline-none focus:bg-white/[0.08]"
+            />
+          </Field>
+          <Field label="Level">
+            <select
+              value={level}
+              onChange={(e) => setLevel(e.target.value)}
+              className="glass w-full rounded-2xl px-4 py-3 text-sm outline-none focus:bg-white/[0.08]"
+            >
+              <option>Beginner</option>
+              <option>Intermediate</option>
+              <option>Advanced</option>
+            </select>
+          </Field>
+          <Field label="Duration (minutes)">
+            <input
+              type="number"
+              min={10}
+              max={180}
+              value={duration}
+              onChange={(e) => setDuration(+e.target.value)}
+              className="glass w-full rounded-2xl px-4 py-3 text-sm outline-none focus:bg-white/[0.08]"
+            />
+          </Field>
+          <div className="md:col-span-2">
+            <Field label="Learning objectives (optional)">
+              <textarea
+                value={objectives}
+                onChange={(e) => setObjectives(e.target.value)}
+                rows={2}
+                placeholder="What should they be able to do after the lesson?"
+                className="glass w-full rounded-2xl px-4 py-3 text-sm outline-none focus:bg-white/[0.08]"
+              />
+            </Field>
+          </div>
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-3">
+          <button
+            onClick={generatePlan}
+            disabled={generating}
+            className="flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-3 text-sm font-medium text-primary-foreground glow transition hover:scale-[1.02] disabled:opacity-50"
+          >
+            {generating ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+            {plan ? "Regenerate plan" : "Generate lesson plan"}
+          </button>
+          <button
+            onClick={sendOutreach}
+            disabled={sending || !plan}
+            className="glass flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition hover:bg-white/[0.08] disabled:opacity-50"
+          >
+            {sending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+            Send outreach email
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {plan && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="glass mt-5 max-h-96 overflow-y-auto whitespace-pre-wrap rounded-2xl p-5 text-sm leading-relaxed text-foreground/90"
+            >
+              {plan}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </GlassCard>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  icon,
+  children,
+}: {
+  label: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label className="mb-1.5 flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-muted-foreground">
+        {icon}
+        {label}
+      </label>
+      {children}
     </div>
   );
 }
