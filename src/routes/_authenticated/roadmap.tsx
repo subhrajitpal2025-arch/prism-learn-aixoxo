@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GlassCard, PageHeader } from "@/components/GlassCard";
+import { askTutor } from "@/lib/tutor.functions";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import {
   Calendar,
