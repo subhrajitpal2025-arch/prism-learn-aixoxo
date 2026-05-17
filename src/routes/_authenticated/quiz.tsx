@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GlassCard, PageHeader } from "@/components/GlassCard";
 import { useState } from "react";
-import { Trophy, Zap, Clock, Sparkles, Loader2, RotateCw, BookOpen } from "lucide-react";
+import { Trophy, Zap, Clock, Sparkles, Loader2, RotateCw, BookOpen, PieChart as PieIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -11,11 +12,6 @@ import { generateQuiz, type QuizQuestion } from "@/lib/quiz.functions";
 export const Route = createFileRoute("/_authenticated/quiz")({
   component: QuizArena,
 });
-
-const LEADERBOARD = [
-  { name: "NovaAI", xp: 12480 }, { name: "QuasarQ", xp: 11200 }, { name: "OrbitX", xp: 9320 },
-  { name: "You", xp: 8870 }, { name: "Pixel", xp: 7700 },
-];
 
 const SUBJECTS = ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science", "History", "Geography", "English"];
 const EXAMS = ["None", "JEE", "NEET", "SAT", "GRE", "GATE", "UPSC", "GCSE", "A-Levels"];
@@ -274,19 +270,89 @@ function QuizArena() {
 
         <GlassCard delay={0.1}>
           <h3 className="mb-3 flex items-center gap-2 text-sm font-medium">
-            <Trophy className="size-4 text-accent" /> Leaderboard
+            <PieIcon className="size-4 text-accent" /> Performance Analysis
           </h3>
-          <ol className="space-y-2 text-sm">
-            {LEADERBOARD.map((p, i) => (
-              <li key={p.name} className={`glass flex items-center justify-between rounded-2xl p-3 ${p.name === "You" ? "ring-1 ring-primary/50" : ""}`}>
-                <span className="flex items-center gap-3">
-                  <span className="grid size-6 place-items-center rounded-full bg-white/10 text-xs">{i + 1}</span>
-                  {p.name}
-                </span>
-                <span className="text-xs text-muted-foreground">{p.xp.toLocaleString()}</span>
-              </li>
-            ))}
-          </ol>
+
+          {stage === "done" && questions.length > 0 ? (
+            (() => {
+              const correct = Math.round(score / 100);
+              const wrong = questions.length - correct;
+              const accuracy = Math.round((correct / questions.length) * 100);
+              const data = [
+                { name: "Correct", value: correct, color: "hsl(160 84% 55%)" },
+                { name: "Incorrect", value: wrong, color: "hsl(0 84% 65%)" },
+              ];
+              return (
+                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                  <div className="relative h-52">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={data}
+                          dataKey="value"
+                          innerRadius={55}
+                          outerRadius={80}
+                          paddingAngle={3}
+                          stroke="none"
+                        >
+                          {data.map((d) => (
+                            <Cell key={d.name} fill={d.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          contentStyle={{
+                            background: "rgba(20,20,30,0.85)",
+                            border: "1px solid rgba(255,255,255,0.1)",
+                            borderRadius: 12,
+                            backdropFilter: "blur(12px)",
+                            fontSize: 12,
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-2xl font-semibold text-gradient">{accuracy}%</span>
+                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Accuracy</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+                    <div className="glass rounded-2xl p-3">
+                      <div className="flex items-center gap-2">
+                        <span className="size-2 rounded-full bg-emerald-400" />
+                        <span className="text-muted-foreground">Correct</span>
+                      </div>
+                      <div className="mt-1 text-lg font-semibold">{correct}</div>
+                    </div>
+                    <div className="glass rounded-2xl p-3">
+                      <div className="flex items-center gap-2">
+                        <span className="size-2 rounded-full bg-red-400" />
+                        <span className="text-muted-foreground">Incorrect</span>
+                      </div>
+                      <div className="mt-1 text-lg font-semibold">{wrong}</div>
+                    </div>
+                    <div className="glass col-span-2 rounded-2xl p-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">XP earned</span>
+                        <span className="flex items-center gap-1 font-semibold text-accent">
+                          <Zap className="size-3" /> {score}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })()
+          ) : (
+            <div className="flex h-52 flex-col items-center justify-center text-center">
+              <div className="grid size-16 place-items-center rounded-full bg-white/5">
+                <PieIcon className="size-7 text-muted-foreground" />
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                {stage === "playing" ? "Finish the quiz to unlock your analysis." : "Your performance breakdown appears here after each quiz."}
+              </p>
+            </div>
+          )}
         </GlassCard>
       </div>
     </div>
