@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GlassCard, PageHeader } from "@/components/GlassCard";
 import { useState } from "react";
-import { Trophy, Zap, Clock, Sparkles, Loader2, RotateCw, BookOpen } from "lucide-react";
+import { Trophy, Zap, Clock, Sparkles, Loader2, RotateCw, BookOpen, PieChart as PieIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
