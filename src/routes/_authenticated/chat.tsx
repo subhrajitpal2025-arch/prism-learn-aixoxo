@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useServerFn } from "@tanstack/react-start";
 import { askTutor } from "@/lib/tutor.functions";
 import { toast } from "sonner";
+import { useT } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/_authenticated/chat")({
   component: Chat,
@@ -15,11 +16,12 @@ export const Route = createFileRoute("/_authenticated/chat")({
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const SUGGESTIONS = ["Explain simply", "Short answer", "Detailed answer"];
+const SUGGESTION_KEYS = ["chat.sug.explain", "chat.sug.short", "chat.sug.detailed"] as const;
 
 function Chat() {
+  const t = useT();
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Hi! I'm your AI tutor. Ask me anything — math, science, history, code." },
+    { role: "assistant", content: t("chat.greeting") },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
