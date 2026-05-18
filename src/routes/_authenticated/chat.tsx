@@ -72,7 +72,7 @@ function Chat() {
 
   return (
     <div className="mx-auto flex h-[calc(100vh-6rem)] max-w-4xl flex-col">
-      <PageHeader title="AI Tutor" subtitle="Your always-on doubt solver." />
+      <PageHeader title={t("chat.title")} subtitle={t("chat.subtitle")} />
 
       <div className="glass flex-1 overflow-y-auto rounded-3xl p-6">
         <AnimatePresence initial={false}>
