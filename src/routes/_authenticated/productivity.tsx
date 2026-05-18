@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { Play, Pause, RotateCcw, Target } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useT } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/_authenticated/productivity")({
   component: Productivity,
 });
 
 function Productivity() {
+  const t = useT();
   const [seconds, setSeconds] = useState(25 * 60);
   const [running, setRunning] = useState(false);
   const [subject, setSubject] = useState("General");
@@ -39,7 +41,7 @@ function Productivity() {
       subject,
       duration_minutes: Math.round(total.current / 60),
     });
-    toast.success("Session logged ✦");
+    toast.success(t("prod.sessionLogged"));
   };
 
   const pct = ((total.current - seconds) / total.current) * 100;
@@ -48,7 +50,7 @@ function Productivity() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <PageHeader title="Productivity" subtitle="Focus deep. Track every minute." />
+      <PageHeader title={t("prod.title")} subtitle={t("prod.subtitle")} />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <GlassCard className="lg:col-span-2">
@@ -58,7 +60,7 @@ function Productivity() {
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               className="glass mt-6 rounded-full px-4 py-2 text-center text-sm outline-none"
-              placeholder="Subject"
+              placeholder={t("prod.subject")}
             />
             <div className="mt-6 flex gap-3">
               <button
@@ -66,13 +68,13 @@ function Productivity() {
                 className="flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-medium text-primary-foreground glow"
               >
                 {running ? <Pause className="size-4" /> : <Play className="size-4" />}
-                {running ? "Pause" : "Start"}
+                {running ? t("prod.pause") : t("prod.start")}
               </button>
               <button
                 onClick={() => { setRunning(false); setSeconds(total.current); }}
                 className="glass flex items-center gap-2 rounded-full px-5 py-3 text-sm"
               >
-                <RotateCcw className="size-4" /> Reset
+                <RotateCcw className="size-4" /> {t("prod.reset")}
               </button>
             </div>
             <div className="mt-6 flex gap-2">
@@ -92,7 +94,7 @@ function Productivity() {
         <div className="flex flex-col gap-4">
           <GlassCard delay={0.1}>
             <div className="mb-2 flex items-center gap-2 text-sm">
-              <Target className="size-4 text-accent" /> Daily goal
+              <Target className="size-4 text-accent" /> {t("prod.dailyGoal")}
             </div>
             <div className="mb-2 flex items-end justify-between">
               <span className="text-2xl font-semibold">2h 10m</span>
@@ -104,7 +106,7 @@ function Productivity() {
           </GlassCard>
 
           <GlassCard delay={0.15}>
-            <h3 className="mb-3 text-sm font-medium">Subject progress</h3>
+            <h3 className="mb-3 text-sm font-medium">{t("prod.subjectProgress")}</h3>
             <div className="space-y-3">
               {[
                 { s: "Math", v: 78 },
