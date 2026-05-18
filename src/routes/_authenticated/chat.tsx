@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useServerFn } from "@tanstack/react-start";
 import { askTutor } from "@/lib/tutor.functions";
 import { toast } from "sonner";
+import { useT } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/_authenticated/chat")({
   component: Chat,
@@ -15,11 +16,12 @@ export const Route = createFileRoute("/_authenticated/chat")({
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const SUGGESTIONS = ["Explain simply", "Short answer", "Detailed answer"];
+const SUGGESTION_KEYS = ["chat.sug.explain", "chat.sug.short", "chat.sug.detailed"] as const;
 
 function Chat() {
+  const t = useT();
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Hi! I'm your AI tutor. Ask me anything — math, science, history, code." },
+    { role: "assistant", content: t("chat.greeting") },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -70,7 +72,7 @@ function Chat() {
 
   return (
     <div className="mx-auto flex h-[calc(100vh-6rem)] max-w-4xl flex-col">
-      <PageHeader title="AI Tutor" subtitle="Your always-on doubt solver." />
+      <PageHeader title={t("chat.title")} subtitle={t("chat.subtitle")} />
 
       <div className="glass flex-1 overflow-y-auto rounded-3xl p-6">
         <AnimatePresence initial={false}>
@@ -98,26 +100,29 @@ function Chat() {
         </AnimatePresence>
         {loading && (
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Loader2 className="size-3 animate-spin" /> Thinking…
+            <Loader2 className="size-3 animate-spin" /> {t("chat.thinking")}
           </div>
         )}
         <div ref={endRef} />
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {SUGGESTIONS.map((s) => (
-          <button key={s} onClick={() => send(s + ": " + (input || "explain photosynthesis"))}
-            className="glass flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs hover:bg-white/10">
-            <Sparkles className="size-3" /> {s}
-          </button>
-        ))}
+        {SUGGESTION_KEYS.map((k) => {
+          const label = t(k);
+          return (
+            <button key={k} onClick={() => send(label + ": " + (input || "explain photosynthesis"))}
+              className="glass flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs hover:bg-white/10">
+              <Sparkles className="size-3" /> {label}
+            </button>
+          );
+        })}
       </div>
 
       <form onSubmit={(e) => { e.preventDefault(); send(); }} className="mt-3 flex gap-2">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask anything…"
+          placeholder={t("chat.placeholder")}
           className="glass flex-1 rounded-full px-5 py-3 text-sm outline-none"
         />
         <button type="submit" disabled={loading}

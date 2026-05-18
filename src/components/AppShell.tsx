@@ -12,19 +12,23 @@ import {
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Particles } from "./Particles";
+import { LanguageSelector } from "./LanguageSelector";
+import { useT } from "@/i18n/LanguageContext";
+import type { TranslationKey } from "@/i18n/translations";
 
-const nav = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/productivity", label: "Productivity", icon: Activity },
-  { to: "/roadmap", label: "Roadmap", icon: Map },
-  { to: "/chat", label: "AI Tutor", icon: MessageSquare },
-  { to: "/quiz", label: "Quiz Arena", icon: Trophy },
-  { to: "/flashcards", label: "Flashcards", icon: Layers },
+const nav: { to: string; key: TranslationKey; icon: typeof LayoutDashboard }[] = [
+  { to: "/dashboard", key: "nav.dashboard", icon: LayoutDashboard },
+  { to: "/productivity", key: "nav.productivity", icon: Activity },
+  { to: "/roadmap", key: "nav.roadmap", icon: Map },
+  { to: "/chat", key: "nav.chat", icon: MessageSquare },
+  { to: "/quiz", key: "nav.quiz", icon: Trophy },
+  { to: "/flashcards", key: "nav.flashcards", icon: Layers },
 ];
 
 export function AppShell() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const t = useT();
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -34,6 +38,11 @@ export function AppShell() {
   return (
     <div className="relative min-h-screen w-full">
       <Particles count={14} />
+      {/* Top bar with language selector (always visible) */}
+      <div className="fixed right-4 top-4 z-50">
+        <LanguageSelector align="right" />
+      </div>
+
       <div className="relative flex min-h-screen">
         {/* Sidebar */}
         <aside className="sticky top-0 hidden h-screen w-64 shrink-0 p-4 md:block">
@@ -43,8 +52,8 @@ export function AppShell() {
                 <Sparkles className="size-5 text-primary-foreground" />
               </div>
               <div>
-                <div className="text-sm font-semibold tracking-tight">AI Teaching</div>
-                <div className="text-xs text-muted-foreground">Studio</div>
+                <div className="text-sm font-semibold tracking-tight">{t("nav.brand")}</div>
+                <div className="text-xs text-muted-foreground">{t("nav.studio")}</div>
               </div>
             </div>
             <nav className="flex flex-1 flex-col gap-1">
@@ -70,7 +79,7 @@ export function AppShell() {
                       />
                     )}
                     <Icon className="size-4" />
-                    {n.label}
+                    {t(n.key)}
                   </Link>
                 );
               })}
@@ -80,7 +89,7 @@ export function AppShell() {
               className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
             >
               <LogOut className="size-4" />
-              Sign out
+              {t("nav.signOut")}
             </button>
           </div>
         </aside>
@@ -95,6 +104,7 @@ export function AppShell() {
                 <Link
                   key={n.to}
                   to={n.to}
+                  aria-label={t(n.key)}
                   className={`grid size-10 place-items-center rounded-full transition ${
                     active ? "bg-gradient-primary text-primary-foreground glow" : "text-muted-foreground"
                   }`}

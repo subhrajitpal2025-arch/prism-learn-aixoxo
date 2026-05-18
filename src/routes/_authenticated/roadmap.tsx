@@ -22,6 +22,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { useT } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/_authenticated/roadmap")({
   component: Roadmap,
@@ -32,6 +33,7 @@ type Milestone = { week: number; title: string; tasks: string[] };
 const STORAGE_KEY = "roadmap_progress_v1";
 
 function Roadmap() {
+  const t = useT();
   const [exam, setExam] = useState("");
   const [date, setDate] = useState("");
   const [hours, setHours] = useState(2);
@@ -80,7 +82,7 @@ function Roadmap() {
     : null;
 
   const generate = async () => {
-    if (!exam) return toast.error("Enter an exam name");
+    if (!exam) return toast.error(t("rm.enterExam"));
     setLoading(true);
     await new Promise((r) => setTimeout(r, 700));
     const weeks = 6;
@@ -112,7 +114,7 @@ function Roadmap() {
         daily_hours: hours,
         plan: out,
       });
-      toast.success("Roadmap saved");
+      toast.success(t("rm.saved"));
     }
     setLoading(false);
   };
@@ -120,30 +122,30 @@ function Roadmap() {
   return (
     <div className="mx-auto max-w-6xl">
       <PageHeader
-        title="Study Roadmap"
-        subtitle="AI-crafted weekly plan, tuned to your timeline."
+        title={t("rm.title")}
+        subtitle={t("rm.subtitle")}
       />
 
       {/* Setup card */}
       <GlassCard>
         <div className="mb-4 flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
-          <Target className="size-3.5" /> Plan setup
+          <Target className="size-3.5" /> {t("rm.setup")}
         </div>
         <div className="grid gap-3 md:grid-cols-4">
           <div className="md:col-span-2">
             <label className="mb-1.5 block text-[11px] uppercase tracking-wider text-muted-foreground">
-              Exam
+              {t("rm.exam")}
             </label>
             <input
               value={exam}
               onChange={(e) => setExam(e.target.value)}
-              placeholder="e.g. SAT, GRE, NEET"
+              placeholder={t("rm.examPh")}
               className="glass w-full rounded-2xl px-4 py-3 text-sm outline-none transition focus:bg-white/[0.08]"
             />
           </div>
           <div>
             <label className="mb-1.5 block text-[11px] uppercase tracking-wider text-muted-foreground">
-              Target date
+              {t("rm.targetDate")}
             </label>
             <input
               type="date"
@@ -154,7 +156,7 @@ function Roadmap() {
           </div>
           <div>
             <label className="mb-1.5 block text-[11px] uppercase tracking-wider text-muted-foreground">
-              Hours / day
+              {t("rm.hoursDay")}
             </label>
             <input
               type="number"
@@ -176,7 +178,7 @@ function Roadmap() {
           ) : (
             <Sparkles className="size-4" />
           )}
-          {plan.length ? "Regenerate roadmap" : "Generate roadmap"}
+          {plan.length ? t("rm.regenerate") : t("rm.generate")}
         </button>
       </GlassCard>
 
@@ -186,7 +188,7 @@ function Roadmap() {
           <div className="mt-6 grid gap-4 md:grid-cols-4">
             <StatCard
               icon={<TrendingUp className="size-4" />}
-              label="Progress"
+              label={t("rm.progress")}
               value={`${progress}%`}
               accent
             >
@@ -201,17 +203,17 @@ function Roadmap() {
             </StatCard>
             <StatCard
               icon={<CheckCircle2 className="size-4" />}
-              label="Tasks done"
+              label={t("rm.tasksDone")}
               value={`${completedTasks}/${totalTasks}`}
             />
             <StatCard
               icon={<Clock className="size-4" />}
-              label="Daily target"
+              label={t("rm.dailyTarget")}
               value={`${hours}h`}
             />
             <StatCard
               icon={<Flame className="size-4" />}
-              label="Days left"
+              label={t("rm.daysLeft")}
               value={daysLeft !== null ? `${daysLeft}` : "—"}
             />
           </div>
@@ -236,7 +238,7 @@ function Roadmap() {
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
-                  Week {m.week}
+                  {t("rm.week")} {m.week}
                   {wDone && <CheckCircle2 className="size-3.5 text-accent" />}
                 </button>
               );
@@ -276,7 +278,7 @@ function Roadmap() {
                           </h3>
                           <div className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
                             <Calendar className="size-3" />
-                            Week {m.week} · {m.tasks.length} tasks
+                            {t("rm.week")} {m.week} · {m.tasks.length} {t("rm.tasks")}
                           </div>
                         </div>
                       </div>
