@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip,
 } from "recharts";
+import { useT } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 type Stat = { day: string; minutes_studied: number; quizzes_completed: number; xp: number; streak: number };
 
 function Dashboard() {
+  const t = useT();
   const [stats, setStats] = useState<Stat[]>([]);
   const [name, setName] = useState("there");
 
@@ -50,22 +52,22 @@ function Dashboard() {
   return (
     <div className="mx-auto max-w-7xl">
       <PageHeader
-        title={`Welcome back, ${name}`}
-        subtitle="Your learning universe at a glance."
+        title={`${t("dash.welcome")}, ${name}`}
+        subtitle={t("dash.subtitle")}
       />
 
       <div className="grid gap-4 md:grid-cols-4">
-        <KpiCard icon={<Flame className="size-5" />} label="Streak" value={`${streak} days`} accent="oklch(0.7 0.24 30)" delay={0} />
-        <KpiCard icon={<Clock className="size-5" />} label="Hours studied" value={`${(totals.minutes / 60).toFixed(1)}h`} accent="oklch(0.72 0.2 280)" delay={0.05} />
-        <KpiCard icon={<Trophy className="size-5" />} label="Quizzes" value={totals.quizzes.toString()} accent="oklch(0.78 0.18 200)" delay={0.1} />
-        <KpiCard icon={<Sparkles className="size-5" />} label="XP" value={totals.xp.toLocaleString()} accent="oklch(0.7 0.22 320)" delay={0.15} />
+        <KpiCard icon={<Flame className="size-5" />} label={t("dash.streak")} value={`${streak} ${t("dash.days")}`} accent="oklch(0.7 0.24 30)" delay={0} />
+        <KpiCard icon={<Clock className="size-5" />} label={t("dash.hours")} value={`${(totals.minutes / 60).toFixed(1)}h`} accent="oklch(0.72 0.2 280)" delay={0.05} />
+        <KpiCard icon={<Trophy className="size-5" />} label={t("dash.quizzes")} value={totals.quizzes.toString()} accent="oklch(0.78 0.18 200)" delay={0.1} />
+        <KpiCard icon={<Sparkles className="size-5" />} label={t("dash.xp")} value={totals.xp.toLocaleString()} accent="oklch(0.7 0.22 320)" delay={0.15} />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         <GlassCard className="lg:col-span-2" delay={0.2}>
           <div className="mb-4 flex items-center gap-2">
             <TrendingUp className="size-4 text-accent" />
-            <h3 className="text-sm font-medium">Weekly progress</h3>
+            <h3 className="text-sm font-medium">{t("dash.weekly")}</h3>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -95,7 +97,7 @@ function Dashboard() {
         <GlassCard delay={0.25}>
           <div className="mb-3 flex items-center gap-2">
             <Quote className="size-4 text-accent" />
-            <h3 className="text-sm font-medium">Daily motivation</h3>
+            <h3 className="text-sm font-medium">{t("dash.motivation")}</h3>
           </div>
           <p className="text-lg leading-snug font-medium text-gradient">
             "The expert in anything was once a beginner."
@@ -106,19 +108,19 @@ function Dashboard() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <GlassCard delay={0.3}>
-          <h3 className="mb-3 text-sm font-medium">AI Recommendations</h3>
+          <h3 className="mb-3 text-sm font-medium">{t("dash.aiRecs")}</h3>
           <ul className="space-y-3 text-sm">
-            <Rec text="Review yesterday's flashcards — recall window is closing" />
-            <Rec text="Take a 10-min break: 90 min focus reached" />
-            <Rec text="Generate a quiz on weak topic: Calculus" />
+            <Rec text={t("dash.rec1")} />
+            <Rec text={t("dash.rec2")} />
+            <Rec text={t("dash.rec3")} />
           </ul>
         </GlassCard>
         <GlassCard delay={0.35}>
-          <h3 className="mb-3 text-sm font-medium">Upcoming tasks</h3>
+          <h3 className="mb-3 text-sm font-medium">{t("dash.upcoming")}</h3>
           <ul className="space-y-3 text-sm">
-            <Task title="Physics — Chapter 4" due="Today" />
-            <Task title="Mock test: SAT Math" due="Tomorrow" />
-            <Task title="Revise: Organic Chem" due="Fri" />
+            <Task title={t("dash.task1")} due={t("dash.due.today")} />
+            <Task title={t("dash.task2")} due={t("dash.due.tomorrow")} />
+            <Task title={t("dash.task3")} due={t("dash.due.fri")} />
           </ul>
         </GlassCard>
       </div>
