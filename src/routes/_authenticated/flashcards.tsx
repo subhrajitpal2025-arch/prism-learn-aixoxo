@@ -5,6 +5,7 @@ import { Plus, Sparkles, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useT } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/_authenticated/flashcards")({
   component: Flashcards,
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/_authenticated/flashcards")({
 type Card = { id: string; front: string; back: string };
 
 function Flashcards() {
+  const t = useT();
   const [cards, setCards] = useState<Card[]>([]);
   const [front, setFront] = useState("");
   const [back, setBack] = useState("");
@@ -40,7 +42,7 @@ function Flashcards() {
   };
 
   const generate = async () => {
-    if (!notes.trim()) return toast.error("Paste some notes first");
+    if (!notes.trim()) return toast.error(t("fc.pasteFirst"));
     setLoading(true);
     await new Promise((r) => setTimeout(r, 700));
     const { data: u } = await supabase.auth.getUser();
@@ -55,7 +57,7 @@ function Flashcards() {
     if (rows.length) await supabase.from("flashcards").insert(rows);
     setNotes("");
     setLoading(false);
-    toast.success(`Created ${rows.length} cards`);
+    toast.success(`${t("fc.created")} ${rows.length} ${t("fc.cards")}`);
     load();
   };
 
@@ -87,7 +89,7 @@ function Flashcards() {
         </GlassCard>
       </div>
 
-      <h2 className="mb-3 mt-8 text-sm font-medium text-muted-foreground">Your deck ({cards.length})</h2>
+      <h2 className="mb-3 mt-8 text-sm font-medium text-muted-foreground">{t("fc.deck")} ({cards.length})</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((c, i) => (
           <motion.button
@@ -114,7 +116,7 @@ function Flashcards() {
           </motion.button>
         ))}
         {cards.length === 0 && (
-          <p className="col-span-full text-center text-sm text-muted-foreground">No cards yet. Generate or add one above.</p>
+          <p className="col-span-full text-center text-sm text-muted-foreground">{t("fc.empty")}</p>
         )}
       </div>
     </div>
