@@ -100,26 +100,29 @@ function Chat() {
         </AnimatePresence>
         {loading && (
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Loader2 className="size-3 animate-spin" /> Thinking…
+            <Loader2 className="size-3 animate-spin" /> {t("chat.thinking")}
           </div>
         )}
         <div ref={endRef} />
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {SUGGESTIONS.map((s) => (
-          <button key={s} onClick={() => send(s + ": " + (input || "explain photosynthesis"))}
-            className="glass flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs hover:bg-white/10">
-            <Sparkles className="size-3" /> {s}
-          </button>
-        ))}
+        {SUGGESTION_KEYS.map((k) => {
+          const label = t(k);
+          return (
+            <button key={k} onClick={() => send(label + ": " + (input || "explain photosynthesis"))}
+              className="glass flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs hover:bg-white/10">
+              <Sparkles className="size-3" /> {label}
+            </button>
+          );
+        })}
       </div>
 
       <form onSubmit={(e) => { e.preventDefault(); send(); }} className="mt-3 flex gap-2">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask anything…"
+          placeholder={t("chat.placeholder")}
           className="glass flex-1 rounded-full px-5 py-3 text-sm outline-none"
         />
         <button type="submit" disabled={loading}
