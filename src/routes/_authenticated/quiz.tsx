@@ -8,6 +8,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { generateQuiz, type QuizQuestion } from "@/lib/quiz.functions";
+import { useT } from "@/i18n/LanguageContext";
 
 export const Route = createFileRoute("/_authenticated/quiz")({
   component: QuizArena,
@@ -22,6 +23,7 @@ type Stage = "setup" | "playing" | "done";
 
 function QuizArena() {
   const gen = useServerFn(generateQuiz);
+  const t = useT();
 
   const [stage, setStage] = useState<Stage>("setup");
   const [subject, setSubject] = useState("Mathematics");
@@ -38,7 +40,7 @@ function QuizArena() {
 
   const start = async () => {
     if (!topic.trim()) {
-      toast.error("Please enter a topic.");
+      toast.error(t("quiz.enterTopic"));
       return;
     }
     setLoading(true);
@@ -47,7 +49,7 @@ function QuizArena() {
         data: { subject, topic: topic.trim(), exam: exam === "None" ? "" : exam, difficulty, count },
       });
       if (result.error || !result.questions.length) {
-        toast.error(result.error ?? "Couldn't generate quiz.");
+        toast.error(result.error ?? t("quiz.couldntGen"));
         return;
       }
       setQuestions(result.questions);
@@ -100,7 +102,7 @@ function QuizArena() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <PageHeader title="Quiz Arena" subtitle="Pick a subject. Battle the AI. Climb the ranks." />
+      <PageHeader title={t("quiz.title")} subtitle={t("quiz.subtitle")} />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-4">
@@ -109,11 +111,11 @@ function QuizArena() {
             <GlassCard>
               <div className="mb-4 flex items-center gap-2">
                 <BookOpen className="size-4 text-accent" />
-                <h3 className="text-sm font-medium">Configure your quiz</h3>
+                <h3 className="text-sm font-medium">{t("quiz.configure")}</h3>
               </div>
 
               <div className="grid gap-3 md:grid-cols-2">
-                <Field label="Subject">
+                <Field label={t("quiz.subject")}>
                   <select
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
