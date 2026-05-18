@@ -127,7 +127,7 @@ function QuizArena() {
                   </select>
                 </Field>
 
-                <Field label="Exam (optional)">
+                <Field label={t("quiz.exam")}>
                   <select
                     value={exam}
                     onChange={(e) => setExam(e.target.value)}
@@ -139,16 +139,16 @@ function QuizArena() {
                   </select>
                 </Field>
 
-                <Field label="Topic" className="md:col-span-2">
+                <Field label={t("quiz.topic")} className="md:col-span-2">
                   <input
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
-                    placeholder="e.g. Newton's laws of motion, Trigonometric identities…"
+                    placeholder={t("quiz.topicPh")}
                     className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   />
                 </Field>
 
-                <Field label="Difficulty">
+                <Field label={t("quiz.difficulty")}>
                   <div className="flex flex-wrap gap-1.5">
                     {DIFFICULTIES.map((d) => (
                       <button
@@ -167,7 +167,7 @@ function QuizArena() {
                   </div>
                 </Field>
 
-                <Field label={`Questions: ${count}`}>
+                <Field label={`${t("quiz.questions")}: ${count}`}>
                   <input
                     type="range"
                     min={3}
@@ -185,7 +185,7 @@ function QuizArena() {
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary px-5 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-95 glow disabled:opacity-50"
               >
                 {loading ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
-                {loading ? "Generating quiz…" : "Generate quiz with AI"}
+                {loading ? t("quiz.generating") : t("quiz.generate")}
               </button>
             </GlassCard>
           )}
@@ -241,7 +241,7 @@ function QuizArena() {
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-4 rounded-2xl bg-white/5 p-3 text-xs text-muted-foreground"
                     >
-                      <span className="text-foreground font-medium">Why: </span>{q.explanation}
+                      <span className="text-foreground font-medium">{t("quiz.why")}</span>{q.explanation}
                     </motion.p>
                   )}
                 </motion.div>
@@ -262,7 +262,7 @@ function QuizArena() {
                     onClick={reset}
                     className="flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-medium text-primary-foreground glow"
                   >
-                    <RotateCw className="size-4" /> New quiz
+                    <RotateCw className="size-4" /> {t("quiz.newQuiz")}
                   </button>
                 </div>
               </motion.div>
@@ -272,7 +272,7 @@ function QuizArena() {
 
         <GlassCard delay={0.1}>
           <h3 className="mb-3 flex items-center gap-2 text-sm font-medium">
-            <PieIcon className="size-4 text-accent" /> Performance Analysis
+            <PieIcon className="size-4 text-accent" /> {t("quiz.analysis")}
           </h3>
 
           {stage === "done" && questions.length > 0 ? (
@@ -281,8 +281,8 @@ function QuizArena() {
               const wrong = questions.length - correct;
               const accuracy = Math.round((correct / questions.length) * 100);
               const data = [
-                { name: "Correct", value: correct, color: "hsl(160 84% 55%)" },
-                { name: "Incorrect", value: wrong, color: "hsl(0 84% 65%)" },
+                { name: t("quiz.correct"), value: correct, color: "hsl(160 84% 55%)" },
+                { name: t("quiz.incorrect"), value: wrong, color: "hsl(0 84% 65%)" },
               ];
               return (
                 <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
@@ -314,7 +314,7 @@ function QuizArena() {
                     </ResponsiveContainer>
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                       <span className="text-2xl font-semibold text-gradient">{accuracy}%</span>
-                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Accuracy</span>
+                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("quiz.accuracy")}</span>
                     </div>
                   </div>
 
@@ -322,20 +322,20 @@ function QuizArena() {
                     <div className="glass rounded-2xl p-3">
                       <div className="flex items-center gap-2">
                         <span className="size-2 rounded-full bg-emerald-400" />
-                        <span className="text-muted-foreground">Correct</span>
+                        <span className="text-muted-foreground">{t("quiz.correct")}</span>
                       </div>
                       <div className="mt-1 text-lg font-semibold">{correct}</div>
                     </div>
                     <div className="glass rounded-2xl p-3">
                       <div className="flex items-center gap-2">
                         <span className="size-2 rounded-full bg-red-400" />
-                        <span className="text-muted-foreground">Incorrect</span>
+                        <span className="text-muted-foreground">{t("quiz.incorrect")}</span>
                       </div>
                       <div className="mt-1 text-lg font-semibold">{wrong}</div>
                     </div>
                     <div className="glass col-span-2 rounded-2xl p-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">XP earned</span>
+                        <span className="text-muted-foreground">{t("quiz.xpEarned")}</span>
                         <span className="flex items-center gap-1 font-semibold text-accent">
                           <Zap className="size-3" /> {score}
                         </span>
@@ -351,7 +351,7 @@ function QuizArena() {
                 <PieIcon className="size-7 text-muted-foreground" />
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
-                {stage === "playing" ? "Finish the quiz to unlock your analysis." : "Your performance breakdown appears here after each quiz."}
+                {stage === "playing" ? t("quiz.finishToUnlock") : t("quiz.breakdown")}
               </p>
             </div>
           )}
