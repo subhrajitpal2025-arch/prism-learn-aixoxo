@@ -104,6 +104,7 @@ function Dashboard() {
             "The expert in anything was once a beginner."
           </p>
           <p className="mt-3 text-xs text-muted-foreground">— Helen Hayes</p>
+          <AIRobot />
         </GlassCard>
       </div>
 
