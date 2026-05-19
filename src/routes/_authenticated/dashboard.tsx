@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GlassCard, PageHeader } from "@/components/GlassCard";
 import { Flame, Clock, Trophy, Sparkles, TrendingUp, Quote } from "lucide-react";
+import { AIRobot } from "@/components/AIRobot";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
