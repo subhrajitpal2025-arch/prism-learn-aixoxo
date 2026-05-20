@@ -148,12 +148,3 @@ function Rec({ text }: { text: string }) {
     </li>
   );
 }
-
-function Task({ title, due }: { title: string; due: string }) {
-  return (
-    <li className="glass flex items-center justify-between rounded-2xl p-3">
-      <span>{title}</span>
-      <span className="text-xs text-muted-foreground">{due}</span>
-    </li>
-  );
-}
