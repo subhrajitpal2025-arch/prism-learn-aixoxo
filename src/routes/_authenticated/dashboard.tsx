@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { GlassCard, PageHeader } from "@/components/GlassCard";
 import { Flame, Clock, Trophy, Sparkles, TrendingUp, Quote } from "lucide-react";
 import { AIRobot } from "@/components/AIRobot";
+import { TodoList } from "@/components/TodoList";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -118,12 +119,7 @@ function Dashboard() {
           </ul>
         </GlassCard>
         <GlassCard delay={0.35}>
-          <h3 className="mb-3 text-sm font-medium">{t("dash.upcoming")}</h3>
-          <ul className="space-y-3 text-sm">
-            <Task title={t("dash.task1")} due={t("dash.due.today")} />
-            <Task title={t("dash.task2")} due={t("dash.due.tomorrow")} />
-            <Task title={t("dash.task3")} due={t("dash.due.fri")} />
-          </ul>
+          <TodoList />
         </GlassCard>
       </div>
     </div>
