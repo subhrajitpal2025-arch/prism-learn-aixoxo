@@ -128,7 +128,7 @@ export const translations = {
     "rm.enterExam": "Enter an exam name",
 
     // Auth
-    "auth.brand": "AI Teaching Studio",
+    "auth.brand": "OrbitEdu",
     "auth.welcome": "Welcome back",
     "auth.createAcc": "Create your account",
     "auth.resetPw": "Reset your password",

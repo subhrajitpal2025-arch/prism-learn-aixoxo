@@ -34,18 +34,18 @@ export function CinematicIntro({ onDone }: { onDone: () => void }) {
           <Particles count={24} />
           <AIOrb size={140} />
           <motion.h1
-            className="mt-12 text-4xl md:text-6xl font-semibold text-gradient tracking-tight"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="glow-text mt-12 text-4xl md:text-6xl font-semibold text-gradient tracking-tight"
+            initial={{ opacity: 0, y: 16, scale: 1.1 }}
+            animate={{ opacity: 1, y: 1, scale: 1 }}
             transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            AI Teaching Studio
+            OrbitEdu
           </motion.h1>
           <motion.p
             className="mt-4 text-sm uppercase tracking-[0.4em] text-muted-foreground"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.6 }}
+            initial={{ opacity: 1, y: 16 }}
+            animate={{ opacity: 0.7, y: 1 }}
+            transition={{ duration: 1.6, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             Learn. Evolve. Excel.
           </motion.p>
