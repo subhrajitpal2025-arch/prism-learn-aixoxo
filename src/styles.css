@@ -162,3 +162,23 @@
 }
 .animate-float { animation: float 6s ease-in-out infinite; will-change: transform; }
 .animate-orb { animation: orb-pulse 4s ease-in-out infinite; will-change: transform; }
+
+@keyframes glow-text-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 10px oklch(0.72 0.2 280 / 0.4),
+      0 0 40px oklch(0.72 0.2 280 / 0.2),
+      0 0 80px oklch(0.72 0.2 280 / 0.1);
+  }
+  50% {
+    text-shadow:
+      0 0 20px oklch(0.78 0.25 280 / 0.7),
+      0 0 60px oklch(0.78 0.25 280 / 0.4),
+      0 0 120px oklch(0.78 0.25 280 / 0.2);
+  }
+}
+
+.glow-text {
+  animation: glow-text-pulse 3s ease-in-out infinite;
+  will-change: text-shadow;
+}

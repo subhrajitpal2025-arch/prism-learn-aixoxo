@@ -26,7 +26,7 @@ export const askTutor = createServerFn({ method: "POST" })
     }
 
     const baseInstruction =
-      "You are AI Teaching Studio's tutor — friendly, concise, and accurate. " +
+      "You are OrbitEdu's tutor — friendly, concise, and accurate. " +
       "Explain concepts clearly, use markdown, include short examples when helpful.";
 
     const stepInstruction =
