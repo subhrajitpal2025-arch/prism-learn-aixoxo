@@ -352,7 +352,7 @@ function Roadmap() {
   );
 }
 
-const WEBHOOK_URL = "https://hook.eu1.make.com/416hfbekgf4o97ksq3ivnehl70e3vxdc";
+const WEBHOOK_URL = "https://hook.eu1.make.com/tqvuapaddsubafxnnjax8fj69y51xm04";
 
 function LessonPlanSection() {
   const [role, setRole] = useState<"educator" | "student">("educator");
